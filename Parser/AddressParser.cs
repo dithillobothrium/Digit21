@@ -26,7 +26,7 @@ namespace Parser
             foreach (var word in words)
             {
                 ClassifyWord(word);
-                ParseWord(word);
+                //ParseWord(word);
             }
 
             return _data;
@@ -66,6 +66,26 @@ namespace Parser
                 }
             }
 
+            //Меняем римские на арабские
+            if (_addr.Contains('I') || _addr.Contains('V') || _addr.Contains('X') || _addr.Contains('L'))
+            {
+                string pattern = @"I*V*I*V*X*I*V*I*L*I*V*I*V*X*I*V*I*";
+                Regex regex = new Regex(pattern);
+                Match match = regex.Match(_addr);
+
+                while (match.Success)
+                {
+                    string romNumber = match.Groups[0].Value;
+                    
+                    if (romNumber != "")
+                    {
+                        string arabNumber = Decode(romNumber);
+                        _addr = _addr.Replace(romNumber, arabNumber);
+                    }
+                    match = match.NextMatch();
+                }
+            }
+
             //var startIndex = 0;
             //while (true)
             //{
@@ -89,10 +109,46 @@ namespace Parser
 
         }
 
-         
+        private static readonly Dictionary<char, int> romanDigits =
+            new Dictionary<char, int> {
+                { 'I', 1 },
+                { 'V', 5 },
+                { 'X', 10 },
+                { 'L', 50 },
+                { 'C', 100 }
+            };
+
+        private static string Decode(string s)
+        {
+            int total = 0;
+            int prev = 0;
+            foreach (char c in s)
+            {
+                int current = romanDigits[c];
+                if (prev == 0)
+                {
+                    prev = romanDigits[c];
+                    total = current;
+                }
+                else
+                {
+                    if (prev < current)
+                    {
+                        total -= current;
+                    }
+                    else
+                    {
+                        total += current;
+                    }
+                }
+            }
+            return total < 0 ? (-total).ToString() : total.ToString();
+        }
 
 
 
-        
+
+
+
     }
 }
