@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Linq;
+﻿using System.IO;
 
-namespace Parser
+namespace Common
 {
     public class RegexData
     {
@@ -18,7 +14,7 @@ namespace Parser
 
         static RegexHelper()
         {
-            var lines = File.ReadAllLines("regex.csv");
+            var lines = File.ReadAllLines(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),"regex.csv"));
             RegexData = new RegexData[lines.Length];
             for (int i = 0; i < lines.Length; i++)
             {

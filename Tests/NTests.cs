@@ -1,57 +1,35 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using CsvHelper;
 using NUnit.Framework;
 using Common;
+using Newtonsoft.Json;
 
 namespace Tests
 {
     public class Tests
     {
         [Test]
-        public void Test1()
+        public async Task TestApi()
         {
-            using (var reader = new StreamReader("good.csv"))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                csv.Configuration.HasHeaderRecord = true;
-                csv.Configuration.Delimiter = ";";
-                csv.Configuration.MissingFieldFound = null;
-                csv.Configuration.BadDataFound = null; //?
-                csv.Configuration.HeaderValidated = null;
-                csv.Configuration.IgnoreQuotes = true;
-                while (csv.Read())
-                {
-                    var anonymousTypeDefinition = new
-                    {
-                        Id = string.Empty,
-                        address = string.Empty,
-                        level = string.Empty,
-                        country = string.Empty,
-                        region = string.Empty,
-                        city = string.Empty,
-                        settlement = string.Empty,
-                        districtType = string.Empty,
-                        districtName = string.Empty,
-                        street = string.Empty,
-                        houseNumber = string.Empty,
-                        houseStructure = string.Empty,
-                        houseBody = string.Empty,
-                        flat = string.Empty,
-                        //office = string.Empty,
-                    };
-                    var input = csv.GetRecord(anonymousTypeDefinition);
+            
+                var json = JsonConvert.SerializeObject("123423,  г.Москва, ул. Народного ополчения, дом 3, кв. 364");
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-                }
+                var url = "http://localhost:64558/api/values";
+                var client = new HttpClient();
 
-            }
-        }
+                var response = await client.PostAsync(url, data);
 
-        [Test]
-        public void Test2()
-        {
+                string result = response.Content.ReadAsStringAsync().Result;
+                Console.WriteLine(result);
 
         }
     }
