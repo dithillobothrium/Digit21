@@ -5,18 +5,31 @@ using System.Text;
 
 namespace Parser
 {
+    public class NameData
+    {
+        public string ScName { get; set; }
+        public string Name { get; set; }
+        public string SocrName { get; set; }
+        public string Code { get; set; }
+    }
     public static class NameHelper
     {
-        public static string[][] NameData;
+        public static NameData[] NameData;
 
         static NameHelper()
         {
             var lines = File.ReadAllLines("names.csv");
-            NameData = new string[lines.Length][];
+            NameData = new NameData[lines.Length];
             for (int i = 0; i < lines.Length; i++)
             {
-                NameData[i] = lines[i].Split('\t');
+                var spl = lines[i].Split('\t');
+                NameData[i] = new NameData(){ScName = spl[0], Name = spl[1], SocrName = spl[2], Code = spl[3]}; 
             }
+        }
+
+        public static void Search()
+        {
+
         }
 
         public static string[] SubwayPrefix =
