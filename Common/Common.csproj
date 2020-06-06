@@ -8,8 +8,8 @@
     <None Update="bad.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="names.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="metro.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="regex.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

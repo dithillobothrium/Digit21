@@ -51,13 +51,10 @@ namespace Parser
             //удаляем из адреса упоминание метро, если оно есть. В листе метро МСК и СПБ
             foreach (string subway in NameHelper.SubwayNames)
             {
-                foreach (string prefix in NameHelper.SubwayPrefix)
+                //без буквы м нельзя - много лишнего будет, например, есть станция Московская = область Московская
+                if (addr.Contains(subway))
                 {
-                    //без буквы м нельзя - много лишнего будет, например, есть станция Московская = область Московская
-                    if (addr.Contains(prefix + subway))
-                    {
-                        addr = addr.Replace(prefix + subway, "");
-                    }
+                    addr = addr.Replace(subway, "");
                 }
             }
 
