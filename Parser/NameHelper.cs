@@ -1,11 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Parser
 {
     public static class NameHelper
     {
+        public static string[][] NameData;
+
+        static NameHelper()
+        {
+            var lines = File.ReadAllLines("names.csv");
+            NameData = new string[lines.Length][];
+            for (int i = 0; i < lines.Length; i++)
+            {
+                NameData[i] = lines[i].Split('\t');
+            }
+        }
+
         public static string[] SubwayPrefix =
         {
             "м.", "м. ", "М.", "М. "

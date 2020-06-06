@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using Accord.MachineLearning;
 using CsvHelper;
 using NUnit.Framework;
 using Common;
@@ -51,37 +53,13 @@ namespace Tests
         [Test]
         public void Test2()
         {
-            var lines = File.ReadAllLines("good.csv");
-
-            var data = new List<FullData>();
-
-            foreach (var line in lines)
+            for (int i = 0; i < 100000; i++)
             {
-                var arr = line.Split(';');
-
-                var record = new FullData()
-                {
-                    id = long.Parse(arr[0]),
-                    address = arr[1],
-                    level = arr[2],
-                    country = arr[3],
-                    region = arr[4],
-                    city = arr[5],
-                    settlement = arr[6],
-                    districtType = arr[7],
-                    districtName = arr[8],
-                    streetSocr = arr[9],
-                    streetName = arr[10],
-                    houseNumber = arr[11],
-                    houseStructure = arr[12],
-                    houseBody = arr[13],
-                    flat = arr[14],
-                    office = arr[15],
-                };
-                data.Add(record);
-
+                var d = Accord.Math.Distance.Levenshtein($"Москва{i}", "Масква");
             }
+            
 
+            
             var a = 1;
         }
     }
