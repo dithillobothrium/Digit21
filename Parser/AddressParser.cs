@@ -29,9 +29,29 @@ namespace Parser
 
             _addr.TrimStart('(');
 
-            _addr = Regex.Replace(_addr, @"^\d+[, ]", "");
+            //вычищаем с помощью регулярных выражений лишние данные
+            RegexData[] regexFormatList = RegexHelper.RegexData;
+            foreach (RegexData format in regexFormatList)
+            {
+                string pattern = format.RegexFormat;
+                string oldValue = format.OldValue;
+                string newValue = format.NewValue;
 
-            _addr = Regex.Replace(_addr, @"\(.+\)", "");
+                Regex regex = new Regex(pattern);
+                Match match = regex.Match(_addr);
+
+                while (match.Success)
+                {
+                    string replaceValue = match.Groups[0].Value;
+
+                    if (replaceValue != "")
+                    {
+                        string oldold = _addr;
+                        _addr = Regex.Replace(_addr, oldValue, newValue);
+                    }
+                    match = match.NextMatch();
+                }
+            }
 
             //удаляем из адреса упоминание метро, если оно есть. В листе метро МСК и СПБ
             foreach (string subway in NameHelper.SubwayNames)
@@ -61,28 +81,6 @@ namespace Parser
                     {
                         string arabNumber = Decode(romNumber);
                         _addr = _addr.Replace(romNumber, arabNumber);
-                    }
-                    match = match.NextMatch();
-                }
-            }
-
-            foreach (RegexData format in RegexHelper.RegexData)
-            {
-                string pattern = format.RegexFormat;
-                string oldValue = format.OldValue;
-                string newValue = format.NewValue;
-
-                Regex regex = new Regex(pattern);
-                Match match = regex.Match(_addr);
-
-                while (match.Success)
-                {
-                    string replaceValue = match.Groups[0].Value;
-
-                    if (replaceValue != "")
-                    {
-                        string valueForReplace = replaceValue.Replace(oldValue, newValue);
-                        _addr = _addr.Replace(replaceValue, valueForReplace);
                     }
                     match = match.NextMatch();
                 }
