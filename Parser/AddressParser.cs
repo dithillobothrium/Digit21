@@ -10,24 +10,19 @@ namespace Parser
 {
     internal class AddressParser
     {
-        private string _addr;
-       
-
         public string Process(string data)
         {
-            _addr = data;
-            
+          
             // CLeanup
-            CleanupAddress();
+            return CleanupAddress(data);
 
-            return _addr;
         }
 
-        private void CleanupAddress()
+        private string CleanupAddress(string addr)
         {
-            _addr = _addr.Replace("\"", ""); // remove quotes
+            addr = addr.Replace("\"", ""); // remove quotes
 
-            _addr.TrimStart('(');
+            addr.TrimStart('(');
 
             //вычищаем с помощью регулярных выражений лишние данные
             RegexData[] regexFormatList = RegexHelper.RegexData;
@@ -38,7 +33,7 @@ namespace Parser
                 string newValue = format.NewValue;
 
                 Regex regex = new Regex(pattern);
-                Match match = regex.Match(_addr);
+                Match match = regex.Match(addr);
 
                 while (match.Success)
                 {
@@ -46,8 +41,8 @@ namespace Parser
 
                     if (replaceValue != "")
                     {
-                        string oldold = _addr;
-                        _addr = Regex.Replace(_addr, oldValue, newValue);
+                        string oldold = addr;
+                        addr = Regex.Replace(addr, oldValue, newValue);
                     }
                     match = match.NextMatch();
                 }
@@ -59,19 +54,19 @@ namespace Parser
                 foreach (string prefix in NameHelper.SubwayPrefix)
                 {
                     //без буквы м нельзя - много лишнего будет, например, есть станция Московская = область Московская
-                    if (_addr.Contains(prefix + subway))
+                    if (addr.Contains(prefix + subway))
                     {
-                        _addr = _addr.Replace(prefix + subway, "");
+                        addr = addr.Replace(prefix + subway, "");
                     }
                 }
             }
 
             //Меняем римские на арабские
-            if (_addr.Contains('I') || _addr.Contains('V') || _addr.Contains('X') || _addr.Contains('L'))
+            if (addr.Contains('I') || addr.Contains('V') || addr.Contains('X') || addr.Contains('L'))
             {
                 string pattern = @"I*V*I*V*X*I*V*I*L*I*V*I*V*X*I*V*I*";
                 Regex regex = new Regex(pattern);
-                Match match = regex.Match(_addr);
+                Match match = regex.Match(addr);
 
                 while (match.Success)
                 {
@@ -80,12 +75,13 @@ namespace Parser
                     if (romNumber != "")
                     {
                         string arabNumber = Decode(romNumber);
-                        _addr = _addr.Replace(romNumber, arabNumber);
+                        addr = addr.Replace(romNumber, arabNumber);
                     }
                     match = match.NextMatch();
                 }
             }
 
+            return addr;
         }
 
         private static readonly Dictionary<char, int> romanDigits =
