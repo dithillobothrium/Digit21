@@ -20,37 +20,15 @@ namespace Parser
         static NameHelper()
         {
 
-            var lines = File.ReadAllLines("names.csv");
-            NameData = new NameData[lines.Length];
-            for (int i = 0; i < lines.Length; i++)
-            {
-                var spl = lines[i].Split('\t');
-                NameData[i] = new NameData(){ScName = spl[0], Name = spl[1], SocrName = spl[2], Code = spl[3]}; 
-            }
+            //var lines = File.ReadAllLines("names.csv");
+            //NameData = new NameData[lines.Length];
+            //for (int i = 0; i < lines.Length; i++)
+            //{
+            //    var spl = lines[i].Split('\t');
+            //    NameData[i] = new NameData(){ScName = spl[0], Name = spl[1], SocrName = spl[2], Code = spl[3]}; 
+            //}
         }
 
-        public static NameData SearchName(string searchPattern)
-        {
-            var scScores = new double[NameData.Length];
-            
-            for (int i = 0; i < NameData.Length; i++)
-            {
-                var scDistance = Accord.Math.Distance.Levenshtein(searchPattern, NameData[i].Name);
-                if (scDistance == 0)
-                {
-                    return NameData[i];
-                }
-                else
-                {
-                    scScores[i] = scDistance;
-                }
-
-                
-            }
-
-            var index = Array.IndexOf(scScores, scScores.Min(s => s));
-            return NameData[index % NameData.Length];
-        }
 
         public static string[] SubwayPrefix =
         {

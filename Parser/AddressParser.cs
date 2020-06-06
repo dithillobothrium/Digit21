@@ -11,17 +11,16 @@ namespace Parser
     internal class AddressParser
     {
         private string _addr;
-        private FullData _data;
+       
 
-        public FullData Process(FullData data)
+        public string Process(string data)
         {
-            _addr = data.address;
-            _data = data;
-
+            _addr = data;
+            
             // CLeanup
             CleanupAddress();
 
-            return _data;
+            return _addr;
         }
 
         private void CleanupAddress()

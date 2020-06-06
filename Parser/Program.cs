@@ -21,15 +21,21 @@ namespace Parser
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.IgnoreQuotes = true;
 
-                while (csv.Read())
+                using (var writer = new StreamWriter("result_digit21.csv"))
+                using (var wr = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
-                    var input = csv.GetRecord<FullData>();
+                    while (csv.Read())
+                    {
+                        var input = csv.GetRecord<Data>();
+                        var parser = new AddressParser();
+                        input.addressNew = parser.Process(input.address);
+                        wr.WriteRecord(input);
+                    }
 
-                    var parser = new AddressParser();
 
-                    var result = parser.Process(input); 
+                    
                 }
-                
+
             }
         }
 

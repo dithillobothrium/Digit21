@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Accord.MachineLearning;
 using CsvHelper;
 using NUnit.Framework;
 using Common;
@@ -53,14 +52,7 @@ namespace Tests
         [Test]
         public void Test2()
         {
-            for (int i = 0; i < 100000; i++)
-            {
-                var d = Accord.Math.Distance.Levenshtein($"Москва{i}", "Масква");
-            }
-            
 
-            
-            var a = 1;
         }
     }
 }

@@ -4,8 +4,10 @@ using System.Text;
 
 namespace Common
 {
-    public class FullData : InputData
+    public class FullData 
     {
+        public long id { get; set; }
+        public string address { get; set; }
         public string level { get; set; }          //уровень до которого распознали: house, street, city, subregion - мун район, region - область
         public string country { get; set; }        //страна. есть не везде
         public string region { get; set; }         //субьект
