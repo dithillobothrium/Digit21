@@ -25,22 +25,22 @@ namespace Parser
             var words = _addr.Split(' ').Where(s => !string.IsNullOrEmpty(s));
             foreach (var word in words)
             {
+                ClassifyWord(word);
                 ParseWord(word);
             }
 
             return _data;
         }
 
+        private void ClassifyWord(string word)
+        {
+            
+        }
+
         private void ParseWord(string word)
         {
-            // check if socr 
-            // if(socr) detect name    //forward
-            // else                    //backward
-            // check region
-            // then city
-            // then street
-            // then other
-            
+            var found = NameHelper.SearchName(word);
+
         }
 
         private void CleanupAddress()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 namespace Parser
 {
@@ -27,9 +28,27 @@ namespace Parser
             }
         }
 
-        public static void Search()
+        public static NameData SearchName(string searchPattern)
         {
+            var scScores = new double[NameData.Length];
+            
+            for (int i = 0; i < NameData.Length; i++)
+            {
+                var scDistance = Accord.Math.Distance.Levenshtein(searchPattern, NameData[i].Name);
+                if (scDistance == 0)
+                {
+                    return NameData[i];
+                }
+                else
+                {
+                    scScores[i] = scDistance;
+                }
 
+                
+            }
+
+            var index = Array.IndexOf(scScores, scScores.Min(s => s));
+            return NameData[index % NameData.Length];
         }
 
         public static string[] SubwayPrefix =
