@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using Common;
 
 namespace Parser
@@ -50,11 +51,19 @@ namespace Parser
 
             _addr.TrimStart('(');
 
-            var lastIndexOfBr1 = _addr.LastIndexOf('(');
-            var lastIndexOfBr2 = _addr.LastIndexOf(')');
-            if (lastIndexOfBr1 > 0 && lastIndexOfBr2 > lastIndexOfBr1)
+            _addr = Regex.Replace(_addr, @"\(.+\)", "");
+
+            //удаляем из адреса упоминание метро, если оно есть. В листе метро МСК и СПБ
+            foreach (string subway in NameHelper.SubwayNames)
             {
-                _addr = _addr.Substring(0, lastIndexOfBr1);
+                foreach (string prefix in NameHelper.SubwayPrefix)
+                {
+                    //без буквы м нельзя - много лишнего будет, например, есть станция Московская = область Московская
+                    if (_addr.Contains(prefix + subway))
+                    {
+                        _addr = _addr.Replace(prefix + subway, "");
+                    }
+                }
             }
 
             //var startIndex = 0;
@@ -77,7 +86,7 @@ namespace Parser
 
             //    startIndex = index + 1;
             //}
-            
+
         }
 
          

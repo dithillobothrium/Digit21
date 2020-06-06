@@ -20,7 +20,7 @@ namespace Parser
                 csv.Configuration.BadDataFound = null; //?
                 csv.Configuration.HeaderValidated = null;
                 csv.Configuration.IgnoreQuotes = true;
-                //csv.Configuration
+
                 while (csv.Read())
                 {
                     var input = csv.GetRecord<FullData>();
