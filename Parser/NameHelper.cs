@@ -19,6 +19,7 @@ namespace Parser
 
         static NameHelper()
         {
+
             var lines = File.ReadAllLines("names.csv");
             NameData = new NameData[lines.Length];
             for (int i = 0; i < lines.Length; i++)

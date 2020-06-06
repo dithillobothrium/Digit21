@@ -21,35 +21,16 @@ namespace Parser
             // CLeanup
             CleanupAddress();
 
-            //split
-            var words = _addr.Split(' ').Where(s => !string.IsNullOrEmpty(s));
-            foreach (var word in words)
-            {
-                ClassifyWord(word);
-                //ParseWord(word);
-            }
-
             return _data;
-        }
-
-        private void ClassifyWord(string word)
-        {
-            
-        }
-
-        private void ParseWord(string word)
-        {
-            var found = NameHelper.SearchName(word);
-
         }
 
         private void CleanupAddress()
         {
             _addr = _addr.Replace("\"", ""); // remove quotes
 
-            _addr = _addr.Replace(",", " ");
-
             _addr.TrimStart('(');
+
+            _addr = Regex.Replace(_addr, @"^\d+[, ]", "");
 
             _addr = Regex.Replace(_addr, @"\(.+\)", "");
 
@@ -86,26 +67,27 @@ namespace Parser
                 }
             }
 
-            //var startIndex = 0;
-            //while (true)
-            //{
-            //    var index = _addr.IndexOf('-', startIndex);
+            foreach (RegexData format in RegexHelper.RegexData)
+            {
+                string pattern = format.RegexFormat;
+                string oldValue = format.OldValue;
+                string newValue = format.NewValue;
 
-            //    if (index < 0)
-            //        break;
+                Regex regex = new Regex(pattern);
+                Match match = regex.Match(_addr);
 
-            //    if (index > 0 && index < _addr.Length - 1)
-            //    {
-            //        if (char.IsDigit(_addr[index - 1]) && char.IsDigit(_addr[index + 1]))
-            //        {
-            //            var ar = _addr.ToCharArray();
-            //            ar[index] = '/';
-            //            _addr = new string(ar);
-            //        }
-            //    }
+                while (match.Success)
+                {
+                    string replaceValue = match.Groups[0].Value;
 
-            //    startIndex = index + 1;
-            //}
+                    if (replaceValue != "")
+                    {
+                        string valueForReplace = replaceValue.Replace(oldValue, newValue);
+                        _addr = _addr.Replace(replaceValue, valueForReplace);
+                    }
+                    match = match.NextMatch();
+                }
+            }
 
         }
 
